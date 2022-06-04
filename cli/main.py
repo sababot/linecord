@@ -275,7 +275,7 @@ class sections:
 
 def main(w):
   # DISCORD VARIABLES
-  token = "MzU4MzM3OTgxMjk3NDU5MjAx.G7Y7w4.jTSniiIo3wNu8KI64-rgB9TwiCCjj9iN93bLZI"
+  token = "MzU4MzM3OTgxMjk3NDU5MjAx.GS5xEe.A2lzRYwo2toMCwjiyxA4EpR9nIUVE1jNO31K1w"
   channel_id = '982013142206931014'
 
   # COLOURS
