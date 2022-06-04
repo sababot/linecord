@@ -2,6 +2,10 @@ import curses
 from curses import wrapper
 from curses.textpad import Textbox, rectangle
 import time
+import os
+import sys
+sys.path.insert(0, "/Users/aitorgh/Desktop/projects/programming/projects/disline/discord")
+import servers as discord_servers
 
 def init(w):
   w.addstr("     _ _     _ _\n")
@@ -26,44 +30,45 @@ class sections:
     # INIT
     # RECTANGLES
     if section == 0:
-      w.attron(curses.color_pair(2))
+      w.attron(curses.color_pair(1))
       rectangle(w, 1, 1, max_height - 2, 20)
-      w.attroff(curses.color_pair(2))
+      w.attroff(curses.color_pair(1))
       rectangle(w, 1, 21, max_height - 5, max_width - 21)
       rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
       rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
 
     elif section == 1:
-      w.attron(curses.color_pair(2))
+      w.attron(curses.color_pair(1))
       rectangle(w, 1, 21, max_height - 5, max_width - 21)
-      w.attroff(curses.color_pair(2))
+      w.attroff(curses.color_pair(1))
       rectangle(w, 1, 1, max_height - 2, 20)
       rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
       rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
 
     elif section == 2:
-      w.attron(curses.color_pair(2))
+      w.attron(curses.color_pair(1))
       rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-      w.attroff(curses.color_pair(2))
+      w.attroff(curses.color_pair(1))
       rectangle(w, 1, 1, max_height - 2, 20)
       rectangle(w, 1, 21, max_height - 5, max_width - 21)
       rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
 
     elif section == 3:
-      w.attron(curses.color_pair(2))
+      w.attron(curses.color_pair(1))
       rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-      w.attroff(curses.color_pair(2))
+      w.attroff(curses.color_pair(1))
       rectangle(w, 1, 1, max_height - 2, 20)
       rectangle(w, 1, 21, max_height - 5, max_width - 21)
       rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
 
     # SERVER
+    w.addstr(2, 3, "----SERVERS-----")
     for i, row in enumerate(servers):
-      w.addstr(2 + i, 3, row)
+      w.addstr(3 + i, 3, row['name'])
 
     while 1:
       key = w.getch()
-      w.clear()
+
 
       # LOGIC
       if key == curses.KEY_UP and section == 2:
@@ -83,37 +88,37 @@ class sections:
       elif key == curses.KEY_LEFT and section != 2 and section != 0:
         section -= 1
 
-      elif key == 27 and section == 0:
+      elif key in {curses.KEY_ENTER, 10, 13} and section == 0:
         self.section_num = 0
         break
 
       # RECTANGLES
       if section == 0:
-        w.attron(curses.color_pair(2))
+        w.attron(curses.color_pair(1))
         rectangle(w, 1, 1, max_height - 2, 20)
-        w.attroff(curses.color_pair(2))
+        w.attroff(curses.color_pair(1))
         rectangle(w, 1, 21, max_height - 5, max_width - 21)
         rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
         rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
 
       elif section == 1:
-        w.attron(curses.color_pair(2))
+        w.attron(curses.color_pair(1))
         rectangle(w, 1, 21, max_height - 5, max_width - 21)
-        w.attroff(curses.color_pair(2))
+        w.attroff(curses.color_pair(1))
         rectangle(w, 1, 1, max_height - 2, 20)
         rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
         rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
 
       elif section == 2:
-        w.attron(curses.color_pair(2))
+        w.attron(curses.color_pair(1))
         rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-        w.attroff(curses.color_pair(2))
+        w.attroff(curses.color_pair(1))
         rectangle(w, 1, 1, max_height - 2, 20)
         rectangle(w, 1, 21, max_height - 5, max_width - 21)
         rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
 
       elif section == 3:
-        w.attron(curses.color_pair(2))
+        w.attron(curses.color_pair(1))
         rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
         w.attroff(curses.color_pair(2))
         rectangle(w, 1, 1, max_height - 2, 20)
@@ -121,26 +126,26 @@ class sections:
         rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
 
       # SERVER
+      w.addstr(2, 3, "----SERVERS-----")
       for i, row in enumerate(servers):
-        w.addstr(2 + i, 3, row)
-
-      w.refresh()
+        w.addstr(3 + i, 3, row['name'])
 
   def servers_func(self, w, max_height, max_width, servers):
     index = 0
 
     w.nodelay(True)
-    w.attron(curses.color_pair(2))
+    w.attron(curses.color_pair(1))
     rectangle(w, 1, 1, max_height - 2, 20)
-    w.attroff(curses.color_pair(2))
+    w.attroff(curses.color_pair(1))
+    w.addstr(2, 3, "----SERVERS-----")
     for i, row in enumerate(servers):
       if i == index:
         w.attron(curses.color_pair(3))
-        w.addstr(2 + i, 3, row)
+        w.addstr(3 + i, 3, row['name'])
         w.attroff(curses.color_pair(3))
 
       else:
-        w.addstr(2 + i, 3, row)
+        w.addstr(3+ i, 3, row['name'])
 
     rectangle(w, 1, 21, max_height - 5, max_width - 21)
     rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
@@ -153,26 +158,27 @@ class sections:
       except:
         key = ""
 
-      if key == curses.KEY_UP:
+      if key == curses.KEY_UP and index > 0:
         index -= 1
 
-      elif key == curses.KEY_DOWN:
+      elif key == curses.KEY_DOWN and index < len(servers) - 1:
         index += 1
 
       elif key == 27:
         break
 
-      w.attron(curses.color_pair(2))
+      w.attron(curses.color_pair(1))
       rectangle(w, 1, 1, max_height - 2, 20)
-      w.attroff(curses.color_pair(2))
+      w.attroff(curses.color_pair(1))
+      w.addstr(2, 3, "----SERVERS-----")
       for i, row in enumerate(servers):
         if i == index:
           w.attron(curses.color_pair(3))
-          w.addstr(2 + i, 3, row)
+          w.addstr(3 + i, 3, row['name'])
           w.attroff(curses.color_pair(3))
 
         else:
-          w.addstr(2 + i, 3, row)
+          w.addstr(3 + i, 3, row['name'])
 
       rectangle(w, 1, 21, max_height - 5, max_width - 21)
       rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
@@ -181,13 +187,18 @@ class sections:
       w.refresh()
 
 def main(w):
+  # DISCORD VARIABLES
+  token = 'OTY0OTE5NjQwMzE4OTM5MjY2.GFtE9U.OKCVVvOIDjRkclb1QSJ5jStt-9DfzssyuoTI0M'
+  channel_id = '982013142206931014'
+
   # COLOURS
   curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
   curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
   curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
-  # VARIABLES
+  # MENU CONFIG
   max_height, max_width = w.getmaxyx()
+  curses.curs_set(0)
 
   servers = curses.newwin(max_height - 4, 18, 2, 2)
   content = curses.newwin(max_height - 7, max_width - 43, 2, 22)
@@ -195,8 +206,7 @@ def main(w):
   users = curses.newwin(max_height - 4, 17, 2, max_width - 19)
 
   # MAIN LOOP
-  servers_list = ['loopwhole', 'sabaworld', 'pussypalace']
-  curses.curs_set(0)
+  servers_list = discord_servers.get_servers(token)
   sections_object = sections(servers, content, messages, users)
 
   while 1:
@@ -208,4 +218,5 @@ def main(w):
   w.refresh()
   w.getch()
 
+os.environ.setdefault('ESCDELAY', '25')
 wrapper(main)
