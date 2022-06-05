@@ -4,7 +4,7 @@ from curses.textpad import Textbox, rectangle
 import time
 import os
 import sys
-sys.path.insert(0, "/Users/aitorgh/Desktop/projects/programming/projects/disline/discord")
+sys.path.insert(0, "/Users/aitorgh/Desktop/projects/programming/projects/linecord/discord")
 import messages as discord_messages
 import servers as discord_servers
 import channels as discord_channels
@@ -29,6 +29,7 @@ class sections:
     self.username = ""
     self.channels = None
     self.active_server = None
+    self.active_server_member_count = None
 
   def draw(self, w, max_height, max_width, servers, token):
     w.nodelay(False)
@@ -51,6 +52,10 @@ class sections:
     if self.channels != None:
       for i, channel in enumerate(self.channels):
         w.addstr(round(max_height / 2) + i, 3, channel['name'])
+
+    # CONTENT MEMBERS
+    if self.active_server_member_count != None:
+      w.addstr(2, max_width - 19, "count: " + str(self.active_server_member_count))
 
     # RECTANGLES
     if section == 0:
@@ -146,6 +151,10 @@ class sections:
         for i, channel in enumerate(self.channels):
           w.addstr(round(max_height / 2) + i, 3, channel['name'])
 
+      # CONTENT MEMBERS
+      if self.active_server_member_count != None:
+        w.addstr(2, max_width - 19, "count: " + str(self.active_server_member_count))
+
       # RECTANGLES
       if section == 0:
         w.attron(curses.color_pair(2))
@@ -224,6 +233,7 @@ class sections:
       elif key in {curses.KEY_ENTER, 10, 13}:
         clear = False
         self.channels = discord_channels.get_channels(token, servers[index]["id"])
+        self.active_server_member_count = discord_servers.get_members(token, servers[index]["id"])
         self.active_server = index
 
       # SERVERS
@@ -253,6 +263,10 @@ class sections:
         for i, channel in enumerate(self.channels):
           w.addstr(round(max_height / 2) + i, 3, channel['name'])
 
+      # CONTENT MEMBERS
+      if self.active_server_member_count != None:
+        w.addstr(2, max_width - 19, "count: " + str(self.active_server_member_count))
+
       # CHANNELS
       rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
       w.addstr(round(max_height / 2) - 1, 2, "channels")
@@ -275,7 +289,7 @@ class sections:
 
 def main(w):
   # DISCORD VARIABLES
-  token = "MzU4MzM3OTgxMjk3NDU5MjAx.GS5xEe.A2lzRYwo2toMCwjiyxA4EpR9nIUVE1jNO31K1w"
+  token = "MzU4MzM3OTgxMjk3NDU5MjAx.GHKWvO.rNtBh-eOFkVxsjgXLInM12Y9Zacb_UGmGIfzlA"
   channel_id = '982013142206931014'
 
   # COLOURS
