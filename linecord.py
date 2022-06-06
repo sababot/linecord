@@ -4,7 +4,7 @@ from curses.textpad import Textbox, rectangle
 import time
 import os
 import sys
-sys.path.insert(0, "/Users/aitorgh/Desktop/projects/programming/projects/linecord/discord")
+sys.path.insert(0, "./discord")
 import messages as discord_messages
 import servers as discord_servers
 import channels as discord_channels
@@ -18,20 +18,15 @@ def init(w, max_height, max_width):
   w.addstr(round(max_height / 2) + 2, round(max_width / 2) - 14, "                  by sababot")
   w.refresh()
 
-class sections:
-  def __init__(self, servers, content, messages, users):
-    self.servers = servers
-    self.content = content
-    self.messages = messages
-    self.users = users
-
+class tui:
+  def __init__(self):
     self.section_num = 2
     self.username = ""
     self.channels = None
     self.active_server = None
     self.active_server_member_count = None
 
-  def draw(self, w, max_height, max_width, servers, token):
+  def home_panel(self, w, max_height, max_width, servers, token):
     w.nodelay(False)
     section = 0
 
@@ -209,7 +204,7 @@ class sections:
       w.addstr(0, round(max_width / 2) - 6, "disline v0.1")
       w.addstr(max_height - 1, round(max_width / 2) - (3 + round(len(self.username) / 2)), "user: " + self.username)
 
-  def servers_func(self, w, token, max_height, max_width, servers):
+  def servers_panel(self, w, token, max_height, max_width, servers):
     index = 0
     clear = False
     w.nodelay(True)
@@ -289,8 +284,7 @@ class sections:
 
 def main(w):
   # DISCORD VARIABLES
-  token = "MzU4MzM3OTgxMjk3NDU5MjAx.GHKWvO.rNtBh-eOFkVxsjgXLInM12Y9Zacb_UGmGIfzlA"
-  channel_id = '982013142206931014'
+  token = "MzU4MzM3OTgxMjk3NDU5MjAx.G7cuOw.DSdg4EPNm53kLAdOmUGpzAPF1z60l8Y0ZW0eOo"
 
   # COLOURS
   curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
@@ -301,26 +295,21 @@ def main(w):
   max_height, max_width = w.getmaxyx()
   curses.curs_set(0)
 
-  servers = curses.newwin(max_height - 4, 18, 2, 2)
-  content = curses.newwin(max_height - 7, max_width - 43, 2, 22)
-  messages = curses.newwin(1, max_width - 43, max_height - 3, 22)
-  users = curses.newwin(max_height - 4, 17, 2, max_width - 19)
-
   # MAIN LOOP
   init(w, max_height, max_width)
   time.sleep(1)
   w.clear()
   servers_list = discord_servers.get_servers(token)
-  sections_object = sections(servers, content, messages, users)
+  tui_object = tui()
 
   while 1:
-    sections_object.draw(w, max_height, max_width, servers_list, token)
+    tui_object.home_panel(w, max_height, max_width, servers_list, token)
 
-    if sections_object.section_num == 0:
-      sections_object.servers_func(w, token, max_height, max_width, servers_list)
+    if tui_object.section_num == 0:
+      tui_object.servers_panel(w, token, max_height, max_width, servers_list)
 
   w.refresh()
   w.getch()
 
-os.environ.setdefault('ESCDELAY', '25')
+os.environ.setdefault('ESCDELAY', '0')
 wrapper(main)
