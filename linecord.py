@@ -31,115 +31,43 @@ class tui:
     section = 0
 
     # INIT
+    key = None
+
     # USER
     self.username = discord_messages.get_username(token)["username"]
 
-    # CONTENT SERVERS
-    for i, row in enumerate(servers):
-      if self.active_server == i:
-        w.attron(curses.color_pair(2))
-        w.addstr(2 + i, 3, row['name'])
-        w.attroff(curses.color_pair(2))
-      else:
-        w.addstr(2 + i, 3, row['name'])
-
-    # CONTENT CHANNELS
-    if self.channels != None:
-      for i, channel in enumerate(self.channels):
-        w.addstr(round(max_height / 2) + i, 3, channel['name'])
-
-    # CONTENT MEMBERS
-    if self.active_server_member_count != None:
-      w.addstr(2, max_width - 19, "count: " + str(self.active_server_member_count))
-
-    # RECTANGLES
-    if section == 0:
-      w.attron(curses.color_pair(2))
-      rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-      w.attroff(curses.color_pair(2))
-      rectangle(w, 1, 21, max_height - 5, max_width - 21)
-      rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-      rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-      rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
-
-    elif section == 1:
-      w.attron(curses.color_pair(2))
-      rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
-      w.attroff(curses.color_pair(2))
-      rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-      rectangle(w, 1, 21, max_height - 5, max_width - 21)
-      rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-      rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-
-    elif section == 2:
-      w.attron(curses.color_pair(2))
-      rectangle(w, 1, 21, max_height - 5, max_width - 21)
-      w.attroff(curses.color_pair(2))
-      rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-      rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-      rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-      rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
-
-    elif section == 3:
-      w.attron(curses.color_pair(2))
-      rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-      w.attroff(curses.color_pair(2))
-      rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-      rectangle(w, 1, 21, max_height - 5, max_width - 21)
-      rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-      rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
-
-    elif section == 4:
-      w.attron(curses.color_pair(2))
-      rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-      w.attroff(curses.color_pair(2))
-      rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-      rectangle(w, 1, 21, max_height - 5, max_width - 21)
-      rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-      rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
-
-    # TEXT
-    w.addstr(1, 2, "servers")
-    w.addstr(round(max_height / 2) - 1, 2, "channels")
-    w.addstr(1, max_width - 19, "members")
-    w.addstr(1, 22, "messages")
-    w.addstr(0, round(max_width / 2) - 6, "disline v0.1")
-    w.addstr(max_height - 1, round(max_width / 2) - (3 + round(len(self.username) / 2)), "user: " + self.username)
-
     while 1:
-      key = w.getch()
-
-
       # LOGIC
-      if key == curses.KEY_UP and (section == 1 or section == 3):
-        section -= 1
-      elif key == curses.KEY_DOWN and (section == 0 or section == 2):
-        section += 1
+      if key != None:
+        if key == curses.KEY_UP and (section == 1 or section == 3):
+          section -= 1
+        elif key == curses.KEY_DOWN and (section == 0 or section == 2):
+          section += 1
 
-      elif key == curses.KEY_RIGHT and section == 0:
-        section += 2
-      elif key == curses.KEY_RIGHT and section == 1:
-        section += 1
-      elif key == curses.KEY_RIGHT and section == 2:
-        section += 2
-      elif key == curses.KEY_RIGHT and section == 3:
-        section += 1
+        elif key == curses.KEY_RIGHT and section == 0:
+          section += 2
+        elif key == curses.KEY_RIGHT and section == 1:
+          section += 1
+        elif key == curses.KEY_RIGHT and section == 2:
+          section += 2
+        elif key == curses.KEY_RIGHT and section == 3:
+          section += 1
 
-      elif key == curses.KEY_LEFT and (section == 2 or section == 4 or section == 3):
-        section -= 2
+        elif key == curses.KEY_LEFT and (section == 2 or section == 4 or section == 3):
+          section -= 2
 
-      elif key in {curses.KEY_ENTER, 10, 13} and section == 0:
-        self.section_num = 0
-        break
+        elif key in {curses.KEY_ENTER, 10, 13} and section == 0:
+          self.section_num = 0
+          break
 
       # CONTENT SERVERS
       for i, row in enumerate(servers):
         if self.active_server == i:
           w.attron(curses.color_pair(2))
-          w.addstr(2 + i, 3, row['name'])
+          w.addstr(1 + i, 3, row['name'])
           w.attroff(curses.color_pair(2))
         else:
-          w.addstr(2 + i, 3, row['name'])
+          w.addstr(1 + i, 3, row['name'])
 
       # CONTENT CHANNELS
       if self.channels != None:
@@ -148,61 +76,62 @@ class tui:
 
       # CONTENT MEMBERS
       if self.active_server_member_count != None:
-        w.addstr(2, max_width - 19, "count: " + str(self.active_server_member_count))
+        w.addstr(1, max_width - 19, "count: " + str(self.active_server_member_count))
 
       # RECTANGLES
       if section == 0:
         w.attron(curses.color_pair(2))
-        rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
+        rectangle(w, 0, 1, round(max_height / 2) - 1, 20)
         w.attroff(curses.color_pair(2))
-        rectangle(w, 1, 21, max_height - 5, max_width - 21)
-        rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-        rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-        rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
+        rectangle(w, 0, 21, max_height - 4, max_width - 21)
+        rectangle(w, max_height - 3, 21, max_height - 1, max_width - 21)
+        rectangle(w, 0, max_width - 20, max_height - 1, max_width - 2)
+        rectangle(w, round(max_height / 2), 1, max_height - 1, 20)
 
       elif section == 1:
         w.attron(curses.color_pair(2))
-        rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
+        rectangle(w, round(max_height / 2), 1, max_height - 1, 20)
         w.attroff(curses.color_pair(2))
-        rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-        rectangle(w, 1, 21, max_height - 5, max_width - 21)
-        rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-        rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
+        rectangle(w, 0, 1, round(max_height / 2) - 1, 20)
+        rectangle(w, 0, 21, max_height - 4, max_width - 21)
+        rectangle(w, max_height - 3, 21, max_height - 1, max_width - 21)
+        rectangle(w, 0, max_width - 20, max_height - 1, max_width - 2)
 
       elif section == 2:
         w.attron(curses.color_pair(2))
-        rectangle(w, 1, 21, max_height - 5, max_width - 21)
+        rectangle(w, 0, 21, max_height - 4, max_width - 21)
         w.attroff(curses.color_pair(2))
-        rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-        rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-        rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-        rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
+        rectangle(w, 0, 1, round(max_height / 2) - 1, 20)
+        rectangle(w, max_height - 3, 21, max_height - 1, max_width - 21)
+        rectangle(w, 0, max_width - 20, max_height - 1, max_width - 2)
+        rectangle(w, round(max_height / 2), 1, max_height - 1, 20)
 
       elif section == 3:
         w.attron(curses.color_pair(2))
-        rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
+        rectangle(w, max_height - 3, 21, max_height - 1, max_width - 21)
         w.attroff(curses.color_pair(1))
-        rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-        rectangle(w, 1, 21, max_height - 5, max_width - 21)
-        rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-        rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
+        rectangle(w, 0, 1, round(max_height / 2) - 1, 20)
+        rectangle(w, 0, 21, max_height - 4, max_width - 21)
+        rectangle(w, 0, max_width - 20, max_height - 1, max_width - 2)
+        rectangle(w, round(max_height / 2), 1, max_height - 1, 20)
 
       elif section == 4:
         w.attron(curses.color_pair(2))
-        rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
+        rectangle(w, 0, max_width - 20, max_height - 1, max_width - 2)
         w.attroff(curses.color_pair(2))
-        rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
-        rectangle(w, 1, 21, max_height - 5, max_width - 21)
-        rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
-        rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
+        rectangle(w, 0, 1, round(max_height / 2) - 1, 20)
+        rectangle(w, 0, 21, max_height - 4, max_width - 21)
+        rectangle(w, max_height - 3, 21, max_height - 1, max_width - 21)
+        rectangle(w, round(max_height / 2), 1, max_height - 1, 20)
 
       # TEXT
-      w.addstr(1, 2, "servers")
-      w.addstr(round(max_height / 2) - 1, 2, "channels")
-      w.addstr(1, max_width - 19, "members")
-      w.addstr(1, 22, "messages")
+      w.addstr(0, 2, "servers")
+      w.addstr(round(max_height / 2), 2, "channels")
+      w.addstr(0, max_width - 19, "members")
+      w.addstr(0, 22, "messages")
       w.addstr(0, round(max_width / 2) - 6, "disline v0.1")
-      w.addstr(max_height - 1, round(max_width / 2) - (3 + round(len(self.username) / 2)), "user: " + self.username)
+
+      key = w.getch()
 
   def servers_panel(self, w, token, max_height, max_width, servers):
     index = 0
@@ -231,24 +160,24 @@ class tui:
         self.active_server_member_count = discord_servers.get_members(token, servers[index]["id"])
         self.active_server = index
 
-      # SERVERS
+      # SERVER
       w.attron(curses.color_pair(2))
-      rectangle(w, 1, 1, round(max_height / 2) - 2, 20)
+      rectangle(w, 0, 1, round(max_height / 2) - 1, 20)
       w.attroff(curses.color_pair(2))
-      w.addstr(1, 2, "servers")
+      w.addstr(0, 2, "servers")
       for i, row in enumerate(servers):
         if i == index:
           w.attron(curses.color_pair(3))
-          w.addstr(2 + i, 3, row['name'])
+          w.addstr(1 + i, 3, row['name'])
           w.attroff(curses.color_pair(3))
 
         else:
           if self.active_server == i:
             w.attron(curses.color_pair(2))
-            w.addstr(2 + i, 3, row['name'])
+            w.addstr(1 + i, 3, row['name'])
             w.attroff(curses.color_pair(2))
           else:
-            w.addstr(2 + i, 3, row['name'])
+            w.addstr(1 + i, 3, row['name'])
 
       # CONTENT CHANNELS
       if self.channels != None:
@@ -260,31 +189,30 @@ class tui:
 
       # CONTENT MEMBERS
       if self.active_server_member_count != None:
-        w.addstr(2, max_width - 19, "count: " + str(self.active_server_member_count))
+        w.addstr(1, max_width - 19, "count: " + str(self.active_server_member_count))
 
       # CHANNELS
-      rectangle(w, round(max_height / 2) - 1, 1, max_height - 2, 20)
-      w.addstr(round(max_height / 2) - 1, 2, "channels")
+      rectangle(w, round(max_height / 2), 1, max_height - 1, 20)
+      w.addstr(round(max_height / 2), 2, "channels")
 
       # CONTENT
-      rectangle(w, 1, 21, max_height - 5, max_width - 21)
-      w.addstr(1, 22, "messages")
+      rectangle(w, 0, 21, max_height - 4, max_width - 21)
+      w.addstr(0, 22, "messages")
       
       # INPUT
-      rectangle(w, max_height - 4, 21, max_height - 2, max_width - 21)
+      rectangle(w, max_height - 3, 21, max_height - 1, max_width - 21)
       
       # MEMBERS
-      rectangle(w, 1, max_width - 20, max_height - 2, max_width - 2)
-      w.addstr(1, max_width - 19, "members")
+      rectangle(w, 0, max_width - 20, max_height - 1, max_width - 2)
+      w.addstr(0, max_width - 19, "members")
 
       w.addstr(0, round(max_width / 2) - 6, "disline v0.1")
-      w.addstr(max_height - 1, round(max_width / 2) - (3 + round(len(self.username) / 2)), "user: " + self.username)
 
       w.refresh()
 
 def main(w):
   # DISCORD VARIABLES
-  token = "MzU4MzM3OTgxMjk3NDU5MjAx.G7cuOw.DSdg4EPNm53kLAdOmUGpzAPF1z60l8Y0ZW0eOo"
+  token = "MzU4MzM3OTgxMjk3NDU5MjAx.GUVsqK.2_WkGNCho310ol9mOLIgZyERRoYGd-y8vVmZkg"
 
   # COLOURS
   curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
