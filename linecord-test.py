@@ -3,6 +3,7 @@ from curses import wrapper
 from curses.textpad import Textbox, rectangle
 import time
 import os
+
 import sys
 sys.path.insert(0, "./discord")
 import messages as discord_messages
@@ -20,6 +21,7 @@ def main(w):
   curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
   curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
   curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
+  curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
   # UI INIT
   max_height, max_width = w.getmaxyx()
@@ -58,6 +60,8 @@ def main(w):
     elif key in {curses.KEY_ENTER, 10, 13}:
       user_interface.enter(w)
 
+    user_interface.content(w)
+    user_interface.input(w, curses, key)
     user_interface.select(w, curses)
 
     key = w.getch()

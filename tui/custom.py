@@ -9,6 +9,10 @@ def init(w, max_height, max_width):
   w.addstr(round(max_height / 2) + 2, round(max_width / 2) - 29, "                                               by sababot")
   w.refresh()
 
-def vert_line(w, x, y1, y2):
+def v_line(w, x, y1, y2):
   for i in range(y2 - y1):
     w.addstr(y1 + i, x, "│")
+
+def h_line(w, y, x1, x2):
+  for i in range(x2 - x1):
+    w.addstr(y, x1 + i, "─")
