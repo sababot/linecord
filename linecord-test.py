@@ -46,28 +46,32 @@ def main(w):
 
   user_interface = sections.tui(max_width, max_height, servers, channels)
 
-  while 1:
-    if key == 9 and user_interface.servers_toggle == True:
-      user_interface.servers_toggle = False
-    elif key == 9 and user_interface.servers_toggle == False:
-      user_interface.servers_toggle = True
+  try:
+    while 1:
+      if key == 9 and user_interface.servers_toggle == True:
+        user_interface.servers_toggle = False
+      elif key == 9 and user_interface.servers_toggle == False:
+        user_interface.servers_toggle = True
 
-    elif (key == curses.KEY_DOWN or key == 106) and user_interface.servers_toggle == True:
-      user_interface.active_channel["index"] += 1
-    elif (key == curses.KEY_UP or key == 107) and user_interface.servers_toggle == True:
-      user_interface.active_channel["index"] -= 1
+      elif (key == curses.KEY_DOWN or key == 106) and user_interface.servers_toggle == True:
+        user_interface.active_channel["index"] += 1
+      elif (key == curses.KEY_UP or key == 107) and user_interface.servers_toggle == True:
+        user_interface.active_channel["index"] -= 1
 
-    elif key in {curses.KEY_ENTER, 10, 13}:
-      user_interface.enter(w)
+      elif key in {curses.KEY_ENTER, 10, 13}:
+        user_interface.enter(w)
 
-    user_interface.content(w)
-    user_interface.input(w, curses, key)
-    user_interface.select(w, curses)
+      user_interface.content(w)
+      user_interface.input(w, curses, key)
+      user_interface.select(w, curses)
 
-    key = w.getch()
+      key = w.getch()
 
-    w.refresh()
-    w.clear()
+      w.refresh()
+      w.clear()
+
+  except KeyboardInterrupt:
+    pass
 
 os.environ.setdefault('ESCDELAY', '0')
 wrapper(main)
