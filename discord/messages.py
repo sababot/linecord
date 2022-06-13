@@ -1,6 +1,15 @@
 import requests
 import json
 
+# CHECK TOKEN
+def check_token(token):
+    url = 'https://discord.com/api/v9/users/@me'
+    header = {"authorization": token}
+
+    r = requests.get(url, headers=header)
+
+    return r.status_code
+
 # GET USERNAME
 def get_username(token):
     url = 'https://discord.com/api/v9/users/@me'

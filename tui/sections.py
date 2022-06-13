@@ -154,17 +154,22 @@ class tui:
         previous_messages = discord_messages.get_messages(self.token, self.active_channel["id"], 25)
         self.input_array = []
         for i in range(len(previous_messages) - 1, -1, -1):
-          self.input_array.append(self.username + ": " + previous_messages[i]["content"])
+          self.input_array.append(previous_messages[i]["author"]["username"] + ": " + previous_messages[i]["content"])
 
     elif self.servers_toggle == False and self.input_string != "":
       discord_messages.send_message(self.token, self.active_channel["id"], self.input_string)
 
       previous_messages = discord_messages.get_messages(self.token, self.active_channel["id"], 1)
-      self.input_array.append(previous_messages[0]["author"]["username"] + ": " + self.input_string)
+      self.input_array.append(self.username + ": " + self.input_string)
 
       self.input_string = ""
 
   def content(self, w):
+    if self.servers_toggle == False:
+      custom.h_line(w, 0, 0, self.max_width - 1)
+    else:
+      custom.h_line(w, 0, 0, self.max_width - 25)
+
     if len(self.input_array) <= self.max_height - 3:
       for i in range(len(self.input_array)):
         w.addstr(i + 1, 2, self.input_array[i])
