@@ -8,11 +8,11 @@ this is why i, with the help of the opensource community (hopefully) will create
 
 <p align="center">
   <br>
-  <img src="https://raw.githubusercontent.com/sababot/disline/master/docs/images/Screenshot%202022-06-04%20at%2019.55.37.png" />
+  <img src="https://raw.githubusercontent.com/sababot/disline/master/docs/images/linecord-intro.png" />
 </p>
 
 # overview
-linecord, the light, fast and small command line iterface discord client. disline uses [requests](https://pypi.org/project/requests/) to make [discord api](https://discord.com/developers/docs/reference) calls and [curses](https://docs.python.org/3/howto/curses.html) for the terminal user interface.
+linecord, the light, fast and small command line interface discord client. disline uses [requests](https://pypi.org/project/requests/) to make [discord api](https://discord.com/developers/docs/reference) calls and [curses](https://docs.python.org/3/howto/curses.html) for the terminal user interface.
 
 - [installation](#installation)
   - [pre-built binaries](#pre-built-binaries)
@@ -38,14 +38,13 @@ cd linecord
 then install all the requirements:
 
 ```
-sudo pip3 install requests curses
+sudo pip3 install -r requirements
 ```
 
 to run linecord
 
 ```
-cd cli
-python3 main.py
+sudo python3 linecord.py
 ```
 
 # login
