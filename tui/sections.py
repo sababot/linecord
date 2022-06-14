@@ -26,6 +26,7 @@ class tui:
     self.select_server_index = 0
     self.active_server = None
     self.active_server_member_count = None
+    self.active_server_online_member_count = None
 
     self.channels = channels
 
@@ -35,10 +36,10 @@ class tui:
       # OUTLINE
       custom.v_line(w, self.max_width - 25, 0, self.max_height)
 
-      w.addstr(1, self.max_width - 23, "servers")
+      w.addstr(0, self.max_width - 23, "servers")
 
       for i in range(len(self.servers)):                            # get channels before a specific channel
-        prev = 2
+        prev = 1
         for j in range(i, 0, -1):
           if self.servers[j - 1]["expand"] == True:
             prev += len(self.channels[j - 1])
@@ -150,8 +151,10 @@ class tui:
 
       elif self.select_channel["type"] == "channel":
         self.active_channel = self.channels[self.select_server_index][self.select_channel["local_index"]]
+        self.active_server_member_count = str(discord_servers.get_members(self.token, self.active_channel["guild_id"]))
+        self.active_server_online_member_count = str(discord_servers.get_online_members(self.token, self.active_channel["guild_id"]))
         
-        previous_messages = discord_messages.get_messages(self.token, self.active_channel["id"], 25)
+        previous_messages = discord_messages.get_messages(self.token, self.active_channel["id"], self.max_height - 3)
         self.input_array = []
         for i in range(len(previous_messages) - 1, -1, -1):
           self.input_array.append(previous_messages[i]["author"]["username"] + ": " + previous_messages[i]["content"])
@@ -166,9 +169,21 @@ class tui:
 
   def content(self, w):
     if self.servers_toggle == False:
-      custom.h_line(w, 0, 0, self.max_width - 1)
+      custom.h_line(w, 0, 0, self.max_width)
+      if self.active_server_member_count != None:
+        w.addstr(0, 2, "members: " + self.active_server_member_count)
+      if self.active_server_online_member_count != None:
+        w.addstr(0, self.max_width - len(self.active_channel["name"]) - len(self.active_server_online_member_count) - 2, "online: " + self.active_server_online_member_count)
+      if self.active_channel != None:
+        w.addstr(0, round(self.max_width * 0.5) - round(len(self.active_channel["name"]) / 2), self.active_channel["name"])
     else:
       custom.h_line(w, 0, 0, self.max_width - 25)
+      if self.active_server_member_count != None:
+        w.addstr(0, 2, "members: " + self.active_server_member_count)
+      if self.active_server_online_member_count != None:
+        w.addstr(0, self.max_width - len(self.active_channel["name"]) - len(self.active_server_online_member_count) - 2, "online: " + self.active_server_online_member_count)
+      if self.active_channel != None:
+        w.addstr(0, round(self.max_width * 0.5) - round(len(self.active_channel["name"]) / 2), self.active_channel["name"])
 
     if len(self.input_array) <= self.max_height - 3:
       for i in range(len(self.input_array)):

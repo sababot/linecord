@@ -6,8 +6,10 @@ def get_token(w, curses, max_height, max_width, token):
 	custom.init_text(w, max_height, max_width)
 
 	token_win = curses.newwin(1, round(max_width * 0.75), round(max_height * 0.7), round(max_width * 0.125))
-	
+	w.attron(curses.color_pair(2))
 	curses.textpad.rectangle(w, round(max_height * 0.7) - 1, round(max_width * 0.125) - 1, round(max_height * 0.7) + 1, round(max_width * 0.885) - 1)
+	w.attroff(curses.color_pair(2))
+	w.addstr(round(max_height * 0.7) - 1, round(max_width * 0.5) - 2, "token")
 	w.refresh()
 
 	token_input = curses.textpad.Textbox(token_win)
