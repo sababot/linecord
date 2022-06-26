@@ -173,7 +173,7 @@ class tui:
       if self.active_server_member_count != None:
         w.addstr(0, 2, "members: " + self.active_server_member_count)
       if self.active_server_online_member_count != None:
-        w.addstr(0, self.max_width - len(self.active_channel["name"]) - len(self.active_server_online_member_count) - 2, "online: " + self.active_server_online_member_count)
+        w.addstr(0, self.max_width - 7 - len(self.active_server_online_member_count) - 2, "online: " + self.active_server_online_member_count)
       if self.active_channel != None:
         w.addstr(0, round(self.max_width * 0.5) - round(len(self.active_channel["name"]) / 2), self.active_channel["name"])
     else:
@@ -181,7 +181,7 @@ class tui:
       if self.active_server_member_count != None:
         w.addstr(0, 2, "members: " + self.active_server_member_count)
       if self.active_server_online_member_count != None:
-        w.addstr(0, self.max_width - len(self.active_channel["name"]) - len(self.active_server_online_member_count) - 2, "online: " + self.active_server_online_member_count)
+        w.addstr(0, self.max_width - 32 - len(self.active_server_online_member_count) - 2, "online: " + self.active_server_online_member_count)
       if self.active_channel != None:
         w.addstr(0, round(self.max_width * 0.5) - round(len(self.active_channel["name"]) / 2), self.active_channel["name"])
 
