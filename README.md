@@ -8,11 +8,11 @@ this is why i, with the help of the opensource community (hopefully) will create
 
 <p align="center">
   <br>
-  <img src="https://raw.githubusercontent.com/sababot/disline/master/docs/images/linecord-intro.png" />
+  <img src="https://raw.githubusercontent.com/sababot/linecord/master/docs/images/linecord-intro.png" />
 </p>
 
 # overview
-linecord, the light, fast and small command line interface discord client. disline uses [requests](https://pypi.org/project/requests/) to make [discord api](https://discord.com/developers/docs/reference) calls and [curses](https://docs.python.org/3/howto/curses.html) for the terminal user interface.
+linecord, the light, fast and small command line interface discord client. linecord uses [requests](https://pypi.org/project/requests/) to make [discord api](https://discord.com/developers/docs/reference) calls and [curses](https://docs.python.org/3/howto/curses.html) for the terminal user interface.
 
 - [installation](#installation)
   - [pre-built binaries](#pre-built-binaries)
@@ -25,13 +25,13 @@ linecord, the light, fast and small command line interface discord client. disli
 there are two ways of installing linecord; using prebuilt binaries or building from source:
 
 ### pre-built binaries
-linecord will soon come to package managers such as apt, pacman and brew. however, for now you have to download the package from [releases](https://github.com/sababot/disline/releases)
+linecord will soon come to package managers such as apt, pacman and brew. however, for now you have to download the package from [releases](https://github.com/sababot/linecord/releases)
 
 ### from source
 first open up a terminal and clone this repository:
 
 ```
-git clone https://github.com/sababot/disline.git
+git clone https://github.com/sababot/linecord.git
 cd linecord
 ```
 
